@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from models import Usuario
 from database import SessionLocal
-from schemas.usuario import UsuarioCreate,UsuarioLogin
+from schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse
 from utils.security import hash_password,verificar_password
 from fastapi import HTTPException   
 router=APIRouter()
@@ -32,5 +32,14 @@ def login(nuevo_usuario:UsuarioLogin):
                 return {"mensaje":"login exitoso"}
 
     finally:    
+        db.close()
+        
+@router.get("/usuarios",response_model=list[UsuarioResponse])
+def obtener_usuarios():
+    db=SessionLocal()
+    try:
+        usuarios=db.query(Usuario).all()
+        return usuarios
+    finally:
         db.close()
         
