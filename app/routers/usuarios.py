@@ -54,7 +54,7 @@ def obtener_usuario(id:int):
     finally:
         db.close()
 
-@router.put("/usuario/{id}",response_model=UsuarioResponse) 
+@router.put("/usuarios/{id}",response_model=UsuarioResponse) 
 def actualizar_usuario(id:int,datos_nuevos:UsuarioUpdate):
     db=SessionLocal()
     try:
@@ -70,3 +70,16 @@ def actualizar_usuario(id:int,datos_nuevos:UsuarioUpdate):
 
     finally:
         db.close()                     
+@router.delete("/usuarios/{id}") 
+def delete(id:int):
+    db=SessionLocal()
+    try:
+        usuario=db.query(Usuario).filter(Usuario.id==id).first()
+        if usuario is None:
+            raise HTTPException(status_code=404,detail="Usuario no encontrado")
+        db.delete(usuario)
+        db.commit()
+        return {"mensaje":"Usuario eliminado con exito"}
+
+    finally:
+        db.close()           
