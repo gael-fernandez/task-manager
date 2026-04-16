@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from models import Usuario
 from database import SessionLocal
-from schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse
+from schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse,UsuarioUpdate
 from utils.security import hash_password,verificar_password
 from fastapi import HTTPException   
 router=APIRouter()
@@ -42,4 +42,31 @@ def obtener_usuarios():
         return usuarios
     finally:
         db.close()
-        
+
+@router.get("/usuarios/{id}",response_model=UsuarioResponse)  
+def obtener_usuario(id:int):
+    db=SessionLocal()
+    try:
+        usuario_id=db.query(Usuario).filter(Usuario.id==id).first()
+        if usuario_id is None:
+            raise HTTPException(status_code=404,detail="Usuario no encontrado")
+        return usuario_id
+    finally:
+        db.close()
+
+@router.put("/usuario/{id}",response_model=UsuarioResponse) 
+def actualizar_usuario(id:int,datos_nuevos:UsuarioUpdate):
+    db=SessionLocal()
+    try:
+        usuario=db.query(Usuario).filter(Usuario.id==id).first()
+        if usuario is None:
+            raise HTTPException(status_code=404,detail="Usuario no encontrado")
+        usuario.nombre=datos_nuevos.nombre
+        usuario.password=hash_password(datos_nuevos.password)
+        db.commit()
+        db.refresh(usuario)
+        return usuario
+
+
+    finally:
+        db.close()                     

@@ -10,3 +10,8 @@ class UsuarioResponse(BaseModel):
     id:int
     nombre:str
     
+class UsuarioUpdate(BaseModel):
+    nombre : str
+    password : str
+
+
