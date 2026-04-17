@@ -18,3 +18,15 @@ def crear_tarea(datos_entrantes:CreateTarea):
         return tarea_nueva
     finally:
         db.close()
+
+@router.get("/usuarios/{id}/tareas",response_model=list[ResponseTarea])
+def lista_tareas(id:int):
+    db=SessionLocal()
+    try:
+        usuario=db.query(Usuario).filter(Usuario.id==id).first()
+        if usuario is None:
+            raise HTTPException(status_code=404,detail="Usuario no encontrado")
+        tareas=db.query(Tareas).filter(Tareas.usuario_id == id).all()
+        return tareas
+    finally:
+        db.close()
