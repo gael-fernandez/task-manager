@@ -11,3 +11,5 @@ class ResponseTarea(BaseModel):
     usuario_id:int
     model_config= ConfigDict(from_attributes=True)
    
+class UpdateTarea(BaseModel):
+    estado:str

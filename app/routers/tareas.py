@@ -2,7 +2,7 @@ from fastapi import APIRouter,HTTPException
 from app.models.Tarea import Tareas
 from app.models.Usuario import Usuario
 from app.database import SessionLocal
-from app.schemas.tarea import CreateTarea,ResponseTarea
+from app.schemas.tarea import CreateTarea,ResponseTarea,UpdateTarea
 router=APIRouter()
 @router.post("/tareas",response_model=ResponseTarea)
 def crear_tarea(datos_entrantes:CreateTarea):
@@ -30,3 +30,17 @@ def lista_tareas(id:int):
         return tareas
     finally:
         db.close()
+
+@router.put("/tareas/{id}",response_model=ResponseTarea) 
+def actualizar(id:int,datos:UpdateTarea):
+    db=SessionLocal()
+    try:
+        tarea=db.query(Tareas).filter(Tareas.id == id).first()
+        if tarea is None:
+            raise HTTPException(status_code=404,detail="Tarea no encontrada")
+        tarea.estado=datos.estado
+        db.commit()
+        db.refresh(tarea)
+        return tarea
+    finally:
+        db.close()           
