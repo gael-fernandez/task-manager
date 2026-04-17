@@ -1,6 +1,6 @@
 from sqlalchemy import Column,String,Integer
 from sqlalchemy import ForeignKey
-from database import Base
+from app.database import Base
 from sqlalchemy.orm import relationship
 class Tareas(Base):
     __tablename__="tareas"

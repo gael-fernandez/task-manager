@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from models import Usuario
-from database import SessionLocal
-from schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse,UsuarioUpdate
-from utils.security import hash_password,verificar_password
+from app.models.Usuario import Usuario
+from app.database import SessionLocal
+from app.schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse,UsuarioUpdate
+from app.utils.security import hash_password,verificar_password
 from fastapi import HTTPException   
 router=APIRouter()
 @router.post("/usuarios")
