@@ -44,3 +44,16 @@ def actualizar(id:int,datos:UpdateTarea):
         return tarea
     finally:
         db.close()           
+@router.delete("/tareas/{id}")
+def eliminar(id:int):
+    db=SessionLocal()
+    try:
+        tarea=db.query(Tareas).filter(Tareas.id==id).first()
+        if tarea is None:
+            raise HTTPException(status_code=404,detail="Tarea no encontrada")
+        db.delete(tarea)
+        db.commit()
+        return {"mensaje":"Tarea eliminada"}
+
+    finally:
+        db.close()    
