@@ -1,19 +1,19 @@
 # Task Manager API
 
-Backend construido con FastAPI, SQLAlchemy y SQLite para administrar usuarios y tareas, incluyendo autenticación con JWT y rutas protegidas.
+Backend built with FastAPI, SQLAlchemy, and SQLite to manage users and tasks, including JWT authentication and protected routes.
 
 ---
 
-## 📌 Descripción
+## 📌 Description
 
-Esta API permite a los usuarios registrarse, iniciar sesión y gestionar sus propias tareas.
+This API allows users to register, log in, and manage their own tasks.
 
-Cada usuario puede crear, consultar, actualizar y eliminar tareas, las cuales están asociadas exclusivamente a su cuenta.
-La autenticación se realiza mediante JSON Web Tokens (JWT), lo que permite proteger las rutas y asegurar que cada usuario solo acceda a sus propios recursos.
+Each user can create, read, update, and delete tasks that are exclusively associated with their account.
+Authentication is handled using JSON Web Tokens (JWT), ensuring that routes are protected and users can only access their own resources.
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Technologies
 
 * FastAPI
 * SQLAlchemy
@@ -24,55 +24,55 @@ La autenticación se realiza mediante JSON Web Tokens (JWT), lo que permite prot
 
 ---
 
-## 🔐 Autenticación
+## 🔐 Authentication
 
-El sistema utiliza JWT para autenticar usuarios.
+The system uses JWT for user authentication.
 
-Flujo:
+Flow:
 
-1. El usuario inicia sesión con `/login`
-2. El backend genera un `access_token`
-3. El cliente envía el token en el header:
+1. The user logs in via `/login`
+2. The backend generates an `access_token`
+3. The client sends the token in the header:
 
 ```
 Authorization: Bearer <token>
 ```
 
-4. El backend valida el token y permite acceso a rutas protegidas
+4. The backend validates the token and grants access to protected routes
 
 ---
 
-## 🚀 Endpoints principales
+## 🚀 Main Endpoints
 
-### 👤 Usuarios
+### 👤 Users
 
-* `POST /usuarios` → Crear usuario
-* `POST /login` → Iniciar sesión
-* `GET /me` → Obtener usuario autenticado
-* `PUT /me` → Actualizar usuario
-* `DELETE /me` → Eliminar usuario
-
----
-
-### 📋 Tareas
-
-* `POST /tareas` → Crear tarea
-* `GET /tareas` → Listar tareas del usuario
-* `PUT /tareas/{id}` → Actualizar tarea
-* `DELETE /tareas/{id}` → Eliminar tarea
+* `POST /usuarios` → Create user
+* `POST /login` → Log in
+* `GET /me` → Get authenticated user
+* `PUT /me` → Update user
+* `DELETE /me` → Delete user
 
 ---
 
-## ⚙️ Instalación y ejecución
+### 📋 Tasks
 
-1. Clonar repositorio:
+* `POST /tareas` → Create task
+* `GET /tareas` → List user tasks
+* `PUT /tareas/{id}` → Update task
+* `DELETE /tareas/{id}` → Delete task
+
+---
+
+## ⚙️ Installation & Setup
+
+1. Clone repository:
 
 ```
-git clone https://github.com/TU_USUARIO/TU_REPO.git
-cd TU_REPO
+git clone https://github.com/gael-fernandez/task-manager
+cd task-manager
 ```
 
-2. Crear entorno virtual:
+2. Create virtual environment:
 
 ```
 python -m venv venv
@@ -80,27 +80,27 @@ source venv/bin/activate   # Linux / Mac
 venv\Scripts\activate      # Windows
 ```
 
-3. Instalar dependencias:
+3. Install dependencies:
 
 ```
 pip install -r requirements.txt
 ```
 
-4. Crear archivo `.env` en la raíz:
+4. Create `.env` file in the root:
 
 ```
-SECRET_KEY=tu_clave_secreta
+SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
-5. Ejecutar servidor:
+5. Run the server:
 
 ```
 uvicorn app.main:app --reload
 ```
 
-6. Abrir documentación:
+6. Open API docs:
 
 ```
 http://127.0.0.1:8000/docs
@@ -108,7 +108,7 @@ http://127.0.0.1:8000/docs
 
 ---
 
-## 📂 Estructura del proyecto
+## 📂 Project Structure
 
 ```
 app/
@@ -122,25 +122,25 @@ app/
 
 ---
 
-## 🔒 Seguridad
+## 🔒 Security
 
-* Contraseñas hasheadas con bcrypt
-* Autenticación con JWT
-* Rutas protegidas con Depends()
-* Cada usuario solo puede acceder a sus propios datos
-
----
-
-## 🚀 Mejoras futuras
-
-* Implementación de roles (admin)
-* Migración a PostgreSQL
-* Deploy en la nube
-* Frontend básico
-* Tests automatizados
+* Passwords hashed with bcrypt
+* JWT-based authentication
+* Protected routes using Depends()
+* Users can only access their own data
 
 ---
 
-## 👨‍💻 Autor
+## 🚀 Future Improvements
 
-Proyecto desarrollado como práctica de backend orientado a APIs REST y autenticación.
+* Role-based access (admin)
+* Migration to PostgreSQL
+* Cloud deployment
+* Basic frontend
+* Automated tests
+
+---
+
+## 👨‍💻 Author
+
+Backend project focused on REST APIs and authentication systems.
