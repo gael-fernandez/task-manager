@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
 from app.models.Usuario import Usuario
 from app.database import SessionLocal
 from app.schemas.usuario import UsuarioCreate,UsuarioLogin,UsuarioResponse,UsuarioUpdate
-from app.utils.security import hash_password,verificar_password
+from app.utils.security import hash_password,verificar_password,crear_token
+from app.utils.token import obtener_usuario_actual
 from fastapi import HTTPException   
 router=APIRouter()
 @router.post("/usuarios")
@@ -25,11 +26,13 @@ def login(nuevo_usuario:UsuarioLogin):
         usuario=db.query(Usuario).filter(Usuario.nombre ==nuevo_usuario.nombre).first()
         if not usuario:
             raise HTTPException(status_code=401,detail="credenciales incorrectas")
-        else:
-            if not verificar_password(nuevo_usuario.password,usuario.password):
+        if not verificar_password(nuevo_usuario.password,usuario.password):
                 raise HTTPException(status_code=401,detail="credenciales incorrectas")
-            else:
-                return {"mensaje":"login exitoso"}
+        datos={"sub":str(usuario.id)}
+        token=crear_token(datos)
+        return{
+    "access_token": token,
+    "token_type": "bearer"}
 
     finally:    
         db.close()
@@ -83,3 +86,11 @@ def delete(id:int):
 
     finally:
         db.close()           
+
+@router.get("/me")
+def mi_usuario(usuario_actual=Depends(obtener_usuario_actual)):
+    return{
+        "id":usuario_actual.id,
+        "nombre":usuario_actual.nombre
+
+    }        

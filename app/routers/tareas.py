@@ -53,7 +53,7 @@ def eliminar(id:int):
             raise HTTPException(status_code=404,detail="Tarea no encontrada")
         db.delete(tarea)
         db.commit()
-        return {"mensaje":"Tarea eliminada"}
+        return {"mensaje":"Tarea eliminada correctamente"}
 
     finally:
         db.close()    
