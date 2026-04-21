@@ -16,8 +16,8 @@ def obtener_usuario_actual(token:str = Depends(oauth2)):
         if usuario is None:
             raise HTTPException(status_code=401,detail="Usuario no valido")
         return usuario
-    except Exception as e :
-        raise HTTPException(status_code=401, detail=f"token invalido {e}")
+    except Exception:
+     raise HTTPException(status_code=401, detail="token invalido")
     finally:
         db.close()
         

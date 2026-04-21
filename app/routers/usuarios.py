@@ -6,7 +6,7 @@ from app.utils.security import hash_password,verificar_password,crear_token
 from app.utils.token import obtener_usuario_actual
 from fastapi import HTTPException   
 router=APIRouter()
-@router.post("/usuarios")
+@router.post("/usuarios",response_model=UsuarioResponse)
 def crear_usuario(usuario:UsuarioCreate):
     db = SessionLocal()
     try:
@@ -14,8 +14,7 @@ def crear_usuario(usuario:UsuarioCreate):
         db.add(nuevo)
         db.commit()
         db.refresh(nuevo)
-        return{"id":nuevo.id
-            ,"nombre":nuevo.nombre}
+        return nuevo
     finally:
         db.close()
 
@@ -37,31 +36,16 @@ def login(nuevo_usuario:UsuarioLogin):
     finally:    
         db.close()
         
-@router.get("/usuarios",response_model=list[UsuarioResponse])
-def obtener_usuarios():
-    db=SessionLocal()
-    try:
-        usuarios=db.query(Usuario).all()
-        return usuarios
-    finally:
-        db.close()
 
-@router.get("/usuarios/{id}",response_model=UsuarioResponse)  
-def obtener_usuario(id:int):
-    db=SessionLocal()
-    try:
-        usuario_id=db.query(Usuario).filter(Usuario.id==id).first()
-        if usuario_id is None:
-            raise HTTPException(status_code=404,detail="Usuario no encontrado")
-        return usuario_id
-    finally:
-        db.close()
+@router.get("/me",response_model=UsuarioResponse)  
+def mi_perfil(usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+        return usuario_actual
 
-@router.put("/usuarios/{id}",response_model=UsuarioResponse) 
-def actualizar_usuario(id:int,datos_nuevos:UsuarioUpdate):
+@router.put("/me",response_model=UsuarioResponse) 
+def actualizar_usuario(datos_nuevos:UsuarioUpdate,usuario_actual:Usuario=Depends(obtener_usuario_actual)):
     db=SessionLocal()
     try:
-        usuario=db.query(Usuario).filter(Usuario.id==id).first()
+        usuario=db.query(Usuario).filter(Usuario.id==usuario_actual.id).first()
         if usuario is None:
             raise HTTPException(status_code=404,detail="Usuario no encontrado")
         usuario.nombre=datos_nuevos.nombre
@@ -73,11 +57,11 @@ def actualizar_usuario(id:int,datos_nuevos:UsuarioUpdate):
 
     finally:
         db.close()                     
-@router.delete("/usuarios/{id}") 
-def delete(id:int):
+@router.delete("/me") 
+def delete(usuario_actual:Usuario=Depends(obtener_usuario_actual)):
     db=SessionLocal()
     try:
-        usuario=db.query(Usuario).filter(Usuario.id==id).first()
+        usuario=db.query(Usuario).filter(Usuario.id==usuario_actual.id).first()
         if usuario is None:
             raise HTTPException(status_code=404,detail="Usuario no encontrado")
         db.delete(usuario)
@@ -86,11 +70,3 @@ def delete(id:int):
 
     finally:
         db.close()           
-
-@router.get("/me")
-def mi_usuario(usuario_actual=Depends(obtener_usuario_actual)):
-    return{
-        "id":usuario_actual.id,
-        "nombre":usuario_actual.nombre
-
-    }        
