@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from app.routers import usuarios,tareas
 import app.models
+from app.database import engine,Base
+from app.models import Usuario,Tarea
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(
     title="Task Manager API",
     description="API de gestión de tareas con autenticación JWT",
