@@ -15,7 +15,11 @@ app = FastAPI(
 
 origins = [
     "http://localhost:5173",
-    "https://frontend-task-manager-proyecto-de-port-gael-fernandezs-projects.vercel.app/"
+    "https://frontend-task-manager-proyecto-de-port-gael-fernandezs-projects.vercel.app/",
+    "frontend-task-manager-proyecto-de-portafolio-p9u3fouod.vercel.app",
+    "frontend-task-manager-proyecto-de-p.vercel.app",
+    "frontend-task-manager-proye-git-22f6c2-gael-fernandezs-projects.vercel.app",
+    "frontend-task-manager-proyecto-de-portafolio-p9u3fouod.vercel.app"
 ]
 
 app.add_middleware(
